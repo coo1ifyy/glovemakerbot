@@ -203,7 +203,7 @@ client.on('interactionCreate', async (interaction) => {
         });
 
       const row = new ActionRowBuilder()
-        .addComponents(button, select);
+        .addComponents(select);
       
       await interaction.reply({
         embeds: [embed],
