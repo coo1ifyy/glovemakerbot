@@ -230,6 +230,10 @@ client.on('interactionCreate', async (interaction) => {
     const gloveInfo = data.gloveInfo;
     const mastery = gloveInfo.mastery;
 
+    if (!data.mastery) {
+      return interaction.reply({ content: 'The glove does not have a mastery.', ephemeral: true });
+    }
+
     let pfp;
     await getHeadshotFromUsername(creator).then(res => {
       pfp = res;
@@ -251,6 +255,24 @@ client.on('interactionCreate', async (interaction) => {
       .setDescription(mastery.description)
       .addFields({ name: 'Upgrades', value: mastery.upgrades })
       .setFooter({ text: `Glove by @${creator}`, iconURL: pfp });
+
+    const button = new ButtonBuilder()
+        .setLabel('Use glove in glove maker')
+        .setURL(`https://www.roblox.com/games/start?placeId=10931788510&launchData=%7B%5C%22gloveCode%5C%22%3A%5C%22${code}%5C%22%7D`)
+        .setStyle(ButtonStyle.Link);
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId(`info_select_preview-${code}`)
+      .setPlaceholder('Select info to preview')
+      .setMinValues(1)
+      .setMaxValues(1)
+      .addOptions(
+        { label: 'Glove', value: 'glove', },
+         { label: 'Mastery', value: 'mastery', default: true }
+      );
+    
+    const buttonRow = new ActionRowBuilder().addComponents(button);
+    const selectRow = new ActionRowBuilder().addComponents(select);
 
     await interaction.update({
       embeds: [embed],
