@@ -200,7 +200,112 @@ client.on('interactionCreate', async (interaction) => {
       return;
     }
 
-    const response = await axios.get(`https://apis.roblox.com/datastores/v1/universes/3942681704/standard-datastores/datastore/entries/entry`, {
+    const selected = interaction.values[0];
+
+    if (selected == "glove") {
+      const response = await axios.get(`https://apis.roblox.com/datastores/v1/universes/3942681704/standard-datastores/datastore/entries/entry`, {
+        params: {
+          datastoreName: "GloveSharingDS",
+          entryKey: code,
+        },
+        headers: {
+          'x-api-key': process.env.RBLX_OPEN_CLOUD_KEY,
+        }
+      }).catch(async (err) => {
+        if (err.response && err.response.data && err.response.data.message === "Entry not found in the datastore.") {
+          return interaction.reply({ content: 'There is no glove with that share code!', ephemeral: true });
+        }
+        console.log(err.response);
+        return interaction.reply({ content: 'There was an error!', ephemeral: true });
+      });
+
+      if (interaction.replied) {
+        return;
+      }
+
+      let data = response.data;
+
+      if (!data.gloveInfo) {
+        return interaction.reply({ content: 'The glove you requested is not supported.', ephemeral: true });
+      }
+
+      const creator = data.creator;
+      const gloveInfo = data.gloveInfo;
+
+      const thumbnailColor = gloveInfo.bgColor;
+      let thumbnailUrl;
+
+      const thumbnailResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${gloveInfo.bgTexture}&returnPolicy=PlaceHolder&size=420x420&format=png`).catch(() => null);
+
+      if (thumbnailResponse && thumbnailResponse.data && thumbnailResponse.data.data[0] && thumbnailResponse.data.data[0].imageUrl) {
+        thumbnailUrl = thumbnailResponse.data.data[0].imageUrl;
+      } else {
+        thumbnailUrl = getThumbnailForColor(thumbnailColor.R, thumbnailColor.G, thumbnailColor.B);
+      }
+
+      let powerToShow = "";
+      if (!gloveInfo.glovePowerInfo) {
+        powerToShow = gloveInfo.power ? gloveInfo.power : "30";
+      } else {
+        powerToShow = gloveInfo.glovePowerInfo;
+      }
+
+      let speedToShow = "";
+      if (!gloveInfo.gloveSpeed.Info) {
+        speedToShow = gloveInfo.gloveSpeed.Actual ? gloveInfo.gloveSpeed.Actual : "10";
+      } else {
+        speedToShow = gloveInfo.gloveSpeed.Info;
+      }
+
+      let abilityActivateText = "";
+      if (!gloveInfo.activationTypeText) {
+        abilityActivateText = gloveInfo.isActive ? "Press E to Use" : "Passive";
+      } else {
+        abilityActivateText = gloveInfo.activationTypeText;
+      }
+
+      let pfp;
+      await getHeadshotFromUsername(creator).then(res => {
+        pfp = res;
+      });
+
+      const embed = new EmbedBuilder()
+        .setTitle(!gloveInfo.gloveName ? "Default" : gloveInfo.gloveName)
+        .setAuthor({ name: `Glove with code: ${code}` })
+        .setColor(rgbToHex(gloveInfo.gloveColor.R || 0, gloveInfo.gloveColor.G || 0, gloveInfo.gloveColor.B || 0))
+        .setThumbnail(thumbnailUrl)
+        .addFields(
+          { name: 'Power', value: powerToShow },
+          { name: 'Speed', value: speedToShow },
+          { name: 'Ability', value: !gloveInfo.abilityName ? "Fart blast" : gloveInfo.abilityName },
+          { name: abilityActivateText, value: "", inline: true }
+        )
+        .setFooter({ text: `Glove by @${creator}`, iconURL: pfp });
+
+      const button = new ButtonBuilder()
+        .setLabel('Use glove in glove maker')
+        .setURL(`https://www.roblox.com/games/start?placeId=10931788510&launchData=%7B%5C%22gloveCode%5C%22%3A%5C%22${code}%5C%22%7D`)
+        .setStyle(ButtonStyle.Link);
+
+      const select = new StringSelectMenuBuilder()
+        .setCustomId(`info_select_preview-${code}`)
+        .setPlaceholder('Select info to preview')
+        .setMinValues(1)
+        .setMaxValues(1)
+        .addOptions(
+          { label: 'Glove', value: 'glove', default: true },
+          { label: 'Mastery', value: 'mastery' }
+        );
+
+      const buttonRow = new ActionRowBuilder().addComponents(button);
+      const selectRow = new ActionRowBuilder().addComponents(select);
+
+      await interaction.reply({
+        embeds: [embed],
+        components: [selectRow, buttonRow],
+      });
+    } else {
+         const response = await axios.get(`https://apis.roblox.com/datastores/v1/universes/3942681704/standard-datastores/datastore/entries/entry`, {
       params: {
         datastoreName: "GloveSharingDS",
         entryKey: code,
