@@ -92,11 +92,11 @@ client.on('interactionCreate', async (interaction) => {
         }
       }).catch((err) => {
         if (err.response.data.message == "Entry not found in the datastore.") {
-          return interaction.reply("There is no glove with that share code!")
+          return interaction.reply({ content: 'There is no glove with that share code!', ephemeral: true })
         }
         
         console.log(err.response)
-        return interaction.reply("There was an error.")
+        return interaction.reply({ content: 'There was an error!', ephemeral: true })
       })
 
       // if glove was returned
@@ -108,7 +108,7 @@ client.on('interactionCreate', async (interaction) => {
       let data = response.data
 
       if (!data.gloveInfo) {
-        return interaction.reply("The glove you requested is not supported.")
+        return interaction.reply({ content: 'The glove you requested is not supported.', ephemeral: true })
       }
       
       let creator = data.creator
