@@ -1,7 +1,6 @@
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
 
 const BOT_ID = "1396948801775996999"
-const SERVER_ID = "1049833264044580955"
 const BOT_TOKEN = process.env.BOT_TOKEN
 
 const rest = new REST().setToken(BOT_TOKEN)
