@@ -191,13 +191,16 @@ client.on('interactionCreate', async (interaction) => {
         .setURL(`https://www.roblox.com/games/start?placeId=10931788510&launchData=%7B%5C%22gloveCode%5C%22%3A%5C%22${code}%5C%22%7D`)
         .setStyle(ButtonStyle.Link);
 
-      const select = new StringSelectMenuBuilder()
-        .setCustomId("SomeSelectMenu")
-        .setPlaceholder("--- choose your option ---")
-        .addOptions([
-          { label: "Select option 1", value: "one" },
-          { label: "Select option 2", value: "two" },
-      ]);
+      const select = new StringSelectMenuBuilder({
+        custom_id: 'a cool select menu',
+        placeholder: 'select an option',
+        max_values: 2,
+        options: [
+            { label: 'option 1', value: '1' },
+            { label: 'option 2', value: '2' },
+            { label: 'option 3', value: '3' },
+         ],
+        });
 
       const row = new ActionRowBuilder()
         .addComponents([button, select]);
