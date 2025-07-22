@@ -192,7 +192,7 @@ client.on('interactionCreate', async (interaction) => {
         .setURL(`https://www.roblox.com/games/start?placeId=10931788510&launchData=%7B%5C%22gloveCode%5C%22%3A%5C%22${code}%5C%22%7D`)
         .setStyle(ButtonStyle.Link);
 
-      const select = new MessageSelectMenu()
+      const select = new StringSelectMenuBuilder()
         .setCustomId("SomeSelectMenu")
         .setPlaceholder("--- choose your option ---")
         .addOptions([
