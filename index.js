@@ -192,16 +192,16 @@ client.on('interactionCreate', async (interaction) => {
         .setStyle(ButtonStyle.Link);
 
       const select = new StringSelectMenuBuilder({
-        custom_id: 'info_select_preview',
+        custom_id: `info_select_preview-${code}`,
         placeholder: 'Select info to preview',
+        min_values: 1,
+        max_values: 1,
         options: [
             { label: 'Glove', value: 'glove', default: true },
             { label: 'Mastery', value: 'mastery' },
-         ],
+         ]
         })
-          .setMinValues(1)
-          .setMaxValues(1);
-
+      
       const buttonRow = new ActionRowBuilder()
         .addComponents(button);
 
@@ -215,5 +215,80 @@ client.on('interactionCreate', async (interaction) => {
     }
   }
 })
+
+client.on('interactionCreate', async (interaction) => {
+  if (interaction.isStringSelectMenu()) {
+    const [prefix, code] = interaction.customId.split('-');
+
+    if !(prefix === 'info_select_preview') {
+      return
+    }
+
+    const response = await axios.get(`https://apis.roblox.com/datastores/v1/universes/3942681704/standard-datastores/datastore/entries/entry`, {
+        params: {
+          'datastoreName': "GloveSharingDS",
+          'entryKey': code,
+        },
+        headers: {
+          'x-api-key': process.env.RBLX_OPEN_CLOUD_KEY
+        }
+      }).catch((err) => {
+        if (err.response.data.message == "Entry not found in the datastore.") {
+          return interaction.reply({ content: 'There was an error!', ephemeral: true })
+        }
+        
+        console.log(err.response)
+        return interaction.reply({ content: 'There was an error!', ephemeral: true })
+      })
+
+    let creator = data.creator
+    let gloveInfo = data.gloveInfo
+
+    if (interaction.replied) {
+        return
+      }
+
+      let data = response.data
+
+      if (!data.gloveInfo) {
+        return interaction.reply({ content: 'The glove you requested is not supported.', ephemeral: true })
+      }
+
+    let mastery = gloveInfo.mastery
+
+    let pfp
+      await getHeadshotFromUsername(creator).then((res) => 
+        pfp = res
+      )
+
+    let thumbnailUrl
+      thumbnailUrl = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${mastery.banner}&returnPolicy=PlaceHolder&size=420x420&format=png`).catch((err) => {})
+      if (thumbnailUrl) {
+        if (thumbnailUrl.data.data[0].imageUrl) {
+          thumbnailUrl = thumbnailUrl.data.data[0].imageUrl
+        } else {
+          thumbnailUrl = getThumbnailForColor(48, 48, 48)
+        }
+      } else {
+        thumbnailUrl = getThumbnailForColor(48, 48, 48)
+      }
+
+    const embed = new EmbedBuilder()
+        .setTitle(`${!gloveInfo.gloveName && "Default" || gloveInfo.gloveName}'s mastery`)
+        .setAuthor({name: `Glove with code: ${code}`})
+        .setColor("#ffba68")
+        .setThumbnail(thumbnailUrl)
+        .setDescription(mastery.description)
+        .addFields(
+          { name: 'Upgrades', value: mastery.upgrades},
+        )
+        .setFooter({ text: `Glove by @${creator}`, iconURL: pfp });
+
+    await interaction.update({
+        embeds: [embed],
+        components: interaction.message.components
+    });
+  }
+});
 
 client.login(process.env.BOT_TOKEN)
