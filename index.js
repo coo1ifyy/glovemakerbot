@@ -237,18 +237,18 @@ client.on('interactionCreate', async (interaction) => {
         return interaction.reply({ content: 'There was an error!', ephemeral: true })
       })
 
-    let creator = data.creator
-    let gloveInfo = data.gloveInfo
-
     if (interaction.replied) {
         return
-      }
+    }
 
       let data = response.data
 
-      if (!data.gloveInfo) {
-        return interaction.reply({ content: 'The glove you requested is not supported.', ephemeral: true })
-      }
+     let creator = data.creator
+    let gloveInfo = data.gloveInfo
+
+    if (!data.gloveInfo) {
+      return interaction.reply({ content: 'The glove you requested is not supported.', ephemeral: true })
+    }
 
     let mastery = gloveInfo.mastery
 
@@ -285,10 +285,7 @@ client.on('interactionCreate', async (interaction) => {
         components: interaction.message.components
     });
   }
-}
 })
-
-client.on('interactionCreate', async (interaction) => {
-  );
+})
 
 client.login(process.env.BOT_TOKEN)
