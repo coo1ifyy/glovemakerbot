@@ -284,8 +284,6 @@ client.on('interactionCreate', async (interaction) => {
         embeds: [embed],
         components: interaction.message.components
     });
-  }
-)
 })
 
 client.login(process.env.BOT_TOKEN)
