@@ -14,7 +14,14 @@ app.get('/', (req, res) => {
 require('./slash-deploy.js'); // Register slash commands
 
 const Discord = require('discord.js');
-const {ButtonStyle, ButtonBuilder, ActionRowBuilder, EmbedBuilder} = require('discord.js')
+const {ButtonStyle,
+       ButtonBuilder, 
+       ActionRowBuilder, 
+       EmbedBuilder, 
+       MessageActionRow, 
+       MessageSelectMenu
+} = require('discord.js')
+
 const client = new Discord.Client({ intents: ["Guilds"] });
 
 const componentToHex = (c) => {
@@ -185,8 +192,25 @@ client.on('interactionCreate', async (interaction) => {
         .setURL(`https://www.roblox.com/games/start?placeId=10931788510&launchData=%7B%5C%22gloveCode%5C%22%3A%5C%22${code}%5C%22%7D`)
         .setStyle(ButtonStyle.Link);
 
+      const gloveOption = new StringSelectMenuOptionBuilder()
+        .setLabel('Glove info')
+        .setValue('glove')
+        .setDescription('Information about the shared glove')
+        .setDefault(true)
+
+      const masteryOption = new StringSelectMenuOptionBuilder()
+        .setLabel('Mastery info')
+        .setValue('mastery')
+        .setDescription('Information about its mastery')
+
+      const select = new StringSelectMenuBuilder()
+      	.setCustomId('select')
+        .setMinValues(1)
+				.setMaxValues(1)
+	      .addOptions([gloveOption, masteryOption]);
+
       const row = new ActionRowBuilder()
-        .addComponents(button);
+        .addComponents([button, select]);
       
       await interaction.reply({
         embeds: [embed],
