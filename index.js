@@ -213,11 +213,7 @@ client.on('interactionCreate', async (interaction) => {
         components: [selectRow, buttonRow]
       })
     }
-  }
-})
-
-client.on('interactionCreate', async (interaction) => {
-  if (interaction.isStringSelectMenu()) {
+  } else if (interaction.isStringSelectMenu()) {
     const [prefix, code] = interaction.customId.split('-');
 
     if (prefix != 'info_select_preview') {
@@ -289,6 +285,10 @@ client.on('interactionCreate', async (interaction) => {
         components: interaction.message.components
     });
   }
-});
+}
+})
+
+client.on('interactionCreate', async (interaction) => {
+  );
 
 client.login(process.env.BOT_TOKEN)
