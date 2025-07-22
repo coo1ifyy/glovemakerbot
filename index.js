@@ -18,8 +18,7 @@ const {ButtonStyle,
        ButtonBuilder, 
        ActionRowBuilder, 
        EmbedBuilder, 
-       MessageActionRow, 
-       MessageSelectMenu
+       StringSelectMenuBuilder
 } = require('discord.js')
 
 const client = new Discord.Client({ intents: ["Guilds"] });
