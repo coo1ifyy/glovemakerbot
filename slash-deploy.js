@@ -7,7 +7,7 @@ const BOT_TOKEN = process.env.BOT_TOKEN
 const rest = new REST().setToken(BOT_TOKEN)
 
 rest.put(Routes.applicationGuildCommands(BOT_ID, SERVER_ID), { body: [] })
-	.catch(console.error);
+	.catch(console.log);
 
 const slashRegister = async () => {
   try {
