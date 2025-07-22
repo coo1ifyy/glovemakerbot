@@ -11,6 +11,8 @@ app.get('/', (req, res) => {
   res.send('bot running')
 })
 
+require('./slash-deploy.js'); // Register slash commands
+
 const Discord = require('discord.js');
 const {ButtonStyle, ButtonBuilder, ActionRowBuilder, EmbedBuilder} = require('discord.js')
 const client = new Discord.Client({ intents: ["Guilds"] });
