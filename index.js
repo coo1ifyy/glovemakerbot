@@ -220,7 +220,7 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.isStringSelectMenu()) {
     const [prefix, code] = interaction.customId.split('-');
 
-    if !(prefix === 'info_select_preview') {
+    if (prefix != 'info_select_preview') {
       return
     }
 
