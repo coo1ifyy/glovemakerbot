@@ -192,22 +192,13 @@ client.on('interactionCreate', async (interaction) => {
         .setURL(`https://www.roblox.com/games/start?placeId=10931788510&launchData=%7B%5C%22gloveCode%5C%22%3A%5C%22${code}%5C%22%7D`)
         .setStyle(ButtonStyle.Link);
 
-      const gloveOption = new StringSelectMenuOptionBuilder()
-        .setLabel('Glove info')
-        .setValue('glove')
-        .setDescription('Information about the shared glove')
-        .setDefault(true)
-
-      const masteryOption = new StringSelectMenuOptionBuilder()
-        .setLabel('Mastery info')
-        .setValue('mastery')
-        .setDescription('Information about its mastery')
-
-      const select = new StringSelectMenuBuilder()
-      	.setCustomId('select')
-        .setMinValues(1)
-				.setMaxValues(1)
-	      .addOptions([gloveOption, masteryOption]);
+      const select = new MessageSelectMenu()
+        .setCustomId("SomeSelectMenu")
+        .setPlaceholder("--- choose your option ---")
+        .addOptions([
+          { label: "Select option 1", value: "one" },
+          { label: "Select option 2", value: "two" },
+      ]);
 
       const row = new ActionRowBuilder()
         .addComponents([button, select]);
