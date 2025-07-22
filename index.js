@@ -192,22 +192,25 @@ client.on('interactionCreate', async (interaction) => {
         .setStyle(ButtonStyle.Link);
 
       const select = new StringSelectMenuBuilder({
-        custom_id: 'a cool select menu',
-        placeholder: 'select an option',
-        max_values: 2,
+        custom_id: 'info_select_preview',
+        placeholder: 'Select info to preview',
         options: [
-            { label: 'option 1', value: '1' },
-            { label: 'option 2', value: '2' },
-            { label: 'option 3', value: '3' },
+            { label: 'Glove', value: 'glove', default: true },
+            { label: 'Mastery', value: 'mastery' },
          ],
-        });
+        })
+          .setMinValues(1)
+          .setMaxValues(1);
 
-      const row = new ActionRowBuilder()
+      const buttonRow = new ActionRowBuilder()
+        .addComponents(button);
+
+      const selectRow = new ActionRowBuilder()
         .addComponents(select);
       
       await interaction.reply({
         embeds: [embed],
-        components: [row]
+        components: [selectRow, buttonRow]
       })
     }
   }
