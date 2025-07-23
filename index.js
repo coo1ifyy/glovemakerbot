@@ -362,7 +362,6 @@ client.on('interactionCreate', async (interaction) => {
       .setAuthor({ name: `Glove with code: ${code}` })
       .setColor("#ffba68")
       .setThumbnail(thumbnailUrl)
-      .addFields({ name: 'Upgrades', value: mastery.upgrades })
       .setFooter({ text: `Glove by @${creator}`, iconURL: pfp });
 
     if (mastery.description && mastery.description.length >= 1) {
