@@ -315,7 +315,7 @@ client.on('interactionCreate', async (interaction) => {
       }
     }).catch(async (err) => {
       if (err.response && err.response.data && err.response.data.message === "Entry not found in the datastore.") {
-        return interaction.reply({ content: 'There was an error!', ephemeral: true });
+        return interaction.reply({ content: 'There is no glove with that share code!', ephemeral: true });
       }
       console.log(err.response);
       return interaction.reply({ content: 'There was an error!', ephemeral: true });
@@ -335,7 +335,7 @@ client.on('interactionCreate', async (interaction) => {
     const gloveInfo = data.gloveInfo;
     const mastery = gloveInfo.mastery;
 
-    if (!data.mastery) {
+    if (!gloveInfo.mastery) {
       return interaction.reply({ content: 'The glove does not have a mastery.', ephemeral: true });
     }
 
