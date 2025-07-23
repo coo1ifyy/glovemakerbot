@@ -182,11 +182,16 @@ client.on('interactionCreate', async (interaction) => {
         .setMaxValues(1)
         .addOptions(
           { label: 'Glove', value: 'glove', default: true },
-          { label: 'Mastery', value: 'mastery', disabled: typeof gloveInfo.mastery === 'undefined' }
+          { label: 'Mastery', value: 'mastery'}
         );
 
       const buttonRow = new ActionRowBuilder().addComponents(button);
       const selectRow = new ActionRowBuilder().addComponents(select);
+
+      let components = [buttonRow]
+      if ("mastery" in gloveInfo) {
+        components.unshift(selectRow)
+      }
 
       await interaction.reply({
         embeds: [embed],
