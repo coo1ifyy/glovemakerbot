@@ -335,7 +335,7 @@ client.on('interactionCreate', async (interaction) => {
     const gloveInfo = data.gloveInfo;
     const mastery = gloveInfo.mastery;
 
-    if (!gloveInfo.mastery) {
+    if (typeof mastery === 'undefined') {
       return interaction.reply({ content: 'The glove does not have a mastery.', ephemeral: true });
     }
 
