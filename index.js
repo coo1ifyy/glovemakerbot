@@ -381,7 +381,7 @@ client.on('interactionCreate', async (interaction) => {
 
     await interaction.update({
       embeds: [embed],
-      components: interaction.message.components,
+      components: [selectRow, buttonRow],
     });
   }
 }})
