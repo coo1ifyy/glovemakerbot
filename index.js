@@ -182,7 +182,7 @@ client.on('interactionCreate', async (interaction) => {
         .setMaxValues(1)
         .addOptions(
           { label: 'Glove', value: 'glove', default: true },
-          { label: 'Mastery', value: 'mastery' }
+          { label: 'Mastery', value: 'mastery', disabled: typeof gloveInfo.mastery === 'undefined' }
         );
 
       const buttonRow = new ActionRowBuilder().addComponents(button);
@@ -372,7 +372,7 @@ client.on('interactionCreate', async (interaction) => {
       .setMinValues(1)
       .setMaxValues(1)
       .addOptions(
-        { label: 'Glove', value: 'glove', },
+        { label: 'Glove', value: 'glove'},
          { label: 'Mastery', value: 'mastery', default: true }
       );
     
