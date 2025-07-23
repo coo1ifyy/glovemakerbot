@@ -195,7 +195,7 @@ client.on('interactionCreate', async (interaction) => {
 
       await interaction.reply({
         embeds: [embed],
-        components: [selectRow, buttonRow],
+        components: components,
       });
     }
   } else if (interaction.isStringSelectMenu()) {
