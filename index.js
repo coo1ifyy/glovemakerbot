@@ -362,9 +362,16 @@ client.on('interactionCreate', async (interaction) => {
       .setAuthor({ name: `Glove with code: ${code}` })
       .setColor("#ffba68")
       .setThumbnail(thumbnailUrl)
-      .setDescription(mastery.description)
       .addFields({ name: 'Upgrades', value: mastery.upgrades })
       .setFooter({ text: `Glove by @${creator}`, iconURL: pfp });
+
+    if (mastery.description && mastery.description.length >= 1) {
+      embed.setDescription(mastery.description)
+    }
+
+    if (mastery.upgrades && mastery.upgrades.length >= 1) {
+      embed.addFields({ name: 'Upgrades', value: mastery.upgrades })
+    }
 
     const button = new ButtonBuilder()
         .setLabel('Use glove in glove maker')
