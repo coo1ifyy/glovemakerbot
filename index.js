@@ -188,7 +188,7 @@ client.on('interactionCreate', async (interaction) => {
       const buttonRow = new ActionRowBuilder().addComponents(button);
       const selectRow = new ActionRowBuilder().addComponents(select);
 
-      await interaction.reply({
+      await interaction.update({
         embeds: [embed],
         components: [selectRow, buttonRow],
       });
@@ -383,6 +383,7 @@ client.on('interactionCreate', async (interaction) => {
       embeds: [embed],
       components: interaction.message.components,
     });
-})
+  }
+});
 
 client.login(process.env.BOT_TOKEN)
