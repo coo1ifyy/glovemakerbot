@@ -181,7 +181,8 @@ client.on('interactionCreate', async (interaction) => {
       if (!result) {
         return
       }
-
+      
+      console.log(result)
       await interaction.reply(result);
     }
   } else
