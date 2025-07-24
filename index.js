@@ -176,7 +176,7 @@ client.on('interactionCreate', async (interaction) => {
       await interaction.reply("Pong!");
     } else if (interaction.commandName === "getsharedglove") {
       const code = interaction.options.getString('code');
-      const result = displayGlove(interaction, code)
+      const result = await displayGlove(interaction, code)
 
       if (!result) {
         return
@@ -196,7 +196,7 @@ client.on('interactionCreate', async (interaction) => {
       const selected = interaction.values[0];
 
       if (selected == "glove") {
-        const result = displayGlove(interaction, code)
+        const result = await displayGlove(interaction, code)
 
         if (!result) {
           return
